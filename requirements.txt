@@ -1,4 +1,10 @@
 ipykernel
-pandas
 contractions
 libretranslate
+seaborn
+pandas
+numpy
+scikit-learn
+tokenizers
+tensorflow
+keras

@@ -1,7 +1,7 @@
 .PHONY: setup clean install run
 
 # Python environment variables
-PYTHON=python3.12
+PYTHON := /usr/bin/python3.10
 VENV=.venv
 VENV_BIN=$(VENV)/bin
 
@@ -17,12 +17,14 @@ setup:
 install: setup
 	@echo "Installing required packages..."
 	@$(VENV_BIN)/pip install -r requirements.txt
+	@echo "Upgrading typing_extensions and ipykernel to satisfy TypeAliasType requirement..."
+	@$(VENV_BIN)/pip install --upgrade --no-deps typing_extensions ipykernel
 
 # Run the notebook (opens it in VS Code)
 run: install
 	@echo "Opening notebook in VS Code..."
-	@$(VENV_BIN)/python -m ipykernel install --user --name taln-env --display-name "Python (TALN)"
-	@code text_preprocessing.ipynb
+	@$(VENV_BIN)/python -m ipykernel install --user --name $(VENV) --display-name "Python (TALN)"
+	@code seq2seq-att.ipynb
 
 # Clean up
 clean:

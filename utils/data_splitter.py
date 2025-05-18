@@ -8,7 +8,14 @@ from sklearn.model_selection import train_test_split
 
 def build_vocabulary(train_file, vocab_file, vocab_size=5000):
     """Build vocabulary using OpenNMT's build-vocab tool"""
-    cmd = ["onmt-build-vocab", "--size", str(vocab_size), "--save_vocab", vocab_file, train_file]
+    cmd = [
+        "onmt-build-vocab",
+        "--size",
+        str(vocab_size),
+        "--save_vocab",
+        vocab_file,
+        train_file,
+    ]
     subprocess.run(cmd, check=True)
 
 
@@ -37,7 +44,7 @@ def split_data(csv_path, output_dir, test_size=0.2, random_state=42, vocab_size=
     # Save train files
     train_en_path = os.path.join(output_dir, "train.en")
     train_fr_path = os.path.join(output_dir, "train.fr")
-    vocab_en_path = os.path.join(output_dir, "vocab.eng")
+    vocab_en_path = os.path.join(output_dir, "vocab.en")
     vocab_fr_path = os.path.join(output_dir, "vocab.fr")
 
     train_df["en"].to_csv(train_en_path, index=False, header=False)
@@ -76,8 +83,13 @@ if __name__ == "__main__":
         "--random-seed", type=int, default=42, help="Random seed for reproducibility"
     )
     parser.add_argument(
-        "--vocab-size", type=int, default=5000, help="Size of the vocabulary to generate"
+        "--vocab-size",
+        type=int,
+        default=5000,
+        help="Size of the vocabulary to generate",
     )
 
     args = parser.parse_args()
-    split_data(args.input, args.output_dir, args.test_size, args.random_seed, args.vocab_size)
+    split_data(
+        args.input, args.output_dir, args.test_size, args.random_seed, args.vocab_size
+    )

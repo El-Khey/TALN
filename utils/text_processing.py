@@ -28,8 +28,6 @@ class TextProcessor:
         processed_text = self.remove_special_characters(processed_text)
         processed_text = self.remove_extra_spaces(processed_text)
 
-        processed_text = "<start>" + processed_text + "<end>"
-
         return processed_text
 
     def to_lower(self, text):

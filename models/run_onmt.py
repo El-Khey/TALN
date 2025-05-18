@@ -23,14 +23,14 @@ def main():
         "model_dir": "model-checkpoints/",
         "train": {
             "batch_size": 64,
-            "max_step": 100,
-            "effective_batch_size": 1024,  # réduit la lenteur liée à l'accumulation
+            "max_step": 20,
+            "effective_batch_size": 1024,
         },
         "data": {
-            "source_vocabulary": "data/src-vocab.txt",
-            "target_vocabulary": "data/tgt-vocab.txt",
-            "train_features_file": "data/train.en",
-            "train_labels_file": "data/train.fr",
+            "source_vocabulary": "../data/cleaned/vocab.fr",
+            "target_vocabulary": "../data/cleaned/vocab.en",
+            "train_features_file": "../data/cleaned/train.fr",
+            "train_labels_file": "../data/cleaned/train.en",
         },
         "model": {
             "num_layers": 2,
@@ -47,7 +47,7 @@ def main():
     if args.run == "train":
         runner.train()
     elif args.run == "translate":
-        runner.infer("data/test.en")
+        runner.infer("../data/cleaned/test.en", predictions_file="output.txt")
 
 
 if __name__ == "__main__":

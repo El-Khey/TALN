@@ -31,11 +31,13 @@ install-requirements:
 	@$(VENV_BIN)/pip install -r requirements.txt
 
 # Run the notebook (opens it in VS Code)
-run: install
-	@echo "Setting up Jupyter kernel..."
-	@$(VENV_BIN)/python -m ipykernel install --user --name onmt-env --display-name "Python (OpenNMT)"
-	@echo "Opening notebook..."
-	@code text_preprocessing.ipynb
+run:
+	@echo "Creating virtual environment with Python $(PYTHON_VERSION)..."
+	@python$(PYTHON_VERSION) -m venv $(VENV) || (echo "Failed to create virtual environment. Please ensure python$(PYTHON_VERSION)-venv is installed."; exit 1)
+	@echo "Upgrading pip..."
+	@$(VENV_BIN)/pip install --upgrade pip
+	@echo "Installing requirements..."
+	@$(VENV_BIN)/pip install -r requirements.txt
 
 # Generate vocabularies
 vocab: install

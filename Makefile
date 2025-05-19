@@ -50,6 +50,14 @@ clean:
 	@rm -rf $(VENV)
 	@jupyter kernelspec remove -f onmt-env 2>/dev/null || true
 
+activate:
+	@echo "Activating virtual environment..."
+	@source $(VENV_BIN)/activate
+
+deactivate:
+	@echo "Deactivating virtual environment..."
+	@deactivate || true
+
 # Show help
 help:
 	@echo "Available commands:"

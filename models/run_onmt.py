@@ -55,8 +55,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "run",
-        choices=["train", "translate", "export-csv"],
-        help="Action à exécuter (train, translate, export-csv).",
+        choices=["train", "translate", "export-csv", "export"],
+        help="Action à exécuter (train, translate, export-csv, export).",
     )
     parser.add_argument(
         "--steps", type=int, default=5000, help="Number of training steps"
@@ -75,12 +75,14 @@ def main():
     config = {
         "model_dir": "model-checkpoints/",
         "train": {
-            "batch_size": 64,
+            "batch_size": 4096,
+            "batch_type": "tokens",
+            "effective_batch_size": 8192,
             "max_step": args.steps,
-            "effective_batch_size": 1024,
             "save_checkpoints_steps": 500,
             "keep_checkpoint_max": 5,
-            "average_last_checkpoints": 5,  # Model averaging
+            "average_last_checkpoints": 5,
+            "mixed_precision": True,
         },
         "data": {
             "source_vocabulary": source_vocab,
@@ -89,6 +91,7 @@ def main():
             "train_labels_file": train_target,
             "eval_features_file": test_source,
             "eval_labels_file": test_target,
+            "num_threads": 4,
         },
         "params": {
             "device_placement": "gpu",
@@ -109,6 +112,9 @@ def main():
 
     if args.run == "train":
         runner.train()
+    elif args.run == "export":
+        runner.export(export_dir="exported_model", checkpoint_path="model-checkpoints/")
+        print("Model exported successfully.")
     elif args.run == "translate":
         runner.infer(test_source, predictions_file=PREDICTIONS_FILE)
         print(f"Translation completed. Results saved to {PREDICTIONS_FILE}")
